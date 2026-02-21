@@ -1,52 +1,31 @@
-import { useEffect, useState } from "react";
 import "./index.css";
-import { sortTodosByStartTime } from "./timeUtils";
-import AddTodo from "./AddTodo";
-import TodoList from "./TodoList";
+import AddTodo from "./components/AddTodo";
+import TodoList from "./components/TodoList";
+import { TodoProvider, useTodos } from "./contexts/Todocontext.js";
 
 export default function App() {
-  const [todos, setTodos] = useState(() => {
-    const stored = localStorage.getItem("todos");
-    try {
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
+  return (
+    <TodoProvider>
+      <DateSelector />
+      <AddTodo />
+      <TodoList />
+    </TodoProvider>
+  );
+}
 
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
-
-  function toggleTodo(id) {
-    setTodos((prev) =>
-      prev.map((todo) =>
-        todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
-      )
-    );
-  }
-
-  function deleteTodo(id) {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
-  }
-
-  function updateTodo(updatedTodo) {
-    setTodos((prev) =>
-      sortTodosByStartTime(
-        prev.map((todo) => (todo.id === updatedTodo.id ? updatedTodo : todo))
-      )
-    );
-  }
+function DateSelector() {
+  const { selectedDate, setSelectedDate } = useTodos();
 
   return (
-    <>
-      <AddTodo setTodos={setTodos} />
-      <TodoList
-        todos={todos}
-        toggleTodo={toggleTodo}
-        deleteTodo={deleteTodo}
-        updateTodo={updateTodo}
-      />
-    </>
+    <div style={{ marginBottom: "1rem" }}>
+      <label>
+        Select Date:{" "}
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+        />
+      </label>
+    </div>
   );
 }

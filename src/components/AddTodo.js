@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { timeToMinutes, sortTodosByStartTime } from "./timeUtils";
+import { timeToMinutes } from "./timeUtils";
+import { useTodos } from "../contexts/Todocontext";
 
-export default function AddTodo({ setTodos }) {
+export default function AddTodo() {
+  const { addTodo } = useTodos();
   const [title, setTitle] = useState("");
   const [firstTime, setFirstTime] = useState("");
   const [secondTime, setSecondTime] = useState("");
@@ -26,8 +28,7 @@ export default function AddTodo({ setTodos }) {
       isDone: false,
     };
 
-    setTodos((prev) => sortTodosByStartTime([...prev, newTodo]));
-
+    addTodo(newTodo);
     setTitle("");
     setFirstTime("");
     setSecondTime("");

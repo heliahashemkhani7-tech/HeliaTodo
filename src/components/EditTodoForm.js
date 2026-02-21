@@ -4,7 +4,6 @@ export default function EditTodoForm({ todo, onSave, onCancel }) {
   const [title, setTitle] = useState(todo.title);
   const [firstTime, setFirstTime] = useState(todo.firstTime);
   const [secondTime, setSecondTime] = useState(todo.secondTime);
-
   useEffect(() => {
     setTitle(todo.title);
     setFirstTime(todo.firstTime);
@@ -22,7 +21,7 @@ export default function EditTodoForm({ todo, onSave, onCancel }) {
   }
 
   return (
-    <form className="todo-item" onSubmit={handleSubmit}>
+    <form className="todo-edit" onSubmit={handleSubmit}>
       <input value={title} onChange={(e) => setTitle(e.target.value)} />
       <input
         type="time"

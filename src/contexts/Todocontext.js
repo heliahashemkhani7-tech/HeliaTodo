@@ -9,61 +9,51 @@ export function TodoProvider({ children }) {
     return stored ? JSON.parse(stored) : {};
   });
 
-  const [selectedDate, setSelectedDate] = useState(() => {
-    return new Date().toISOString().slice(0, 10);
-  });
-  const todos = todosByDate[selectedDate] || [];
 
   useEffect(() => {
     localStorage.setItem("todosByDate", JSON.stringify(todosByDate));
   }, [todosByDate]);
 
-  function toggleTodo(id) {
+  function toggleTodo(date, id) {
     setTodosByDate((prev) => {
-      const dayTodos = prev[selectedDate].map((todo) =>
+      const dayTodos = (prev[date] || []).map((todo) =>
         todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
       );
-      return { ...prev, [selectedDate]: dayTodos };
+      return { ...prev, [date]: dayTodos };
     });
   }
 
-  function deleteTodo(id) {
+  function deleteTodo(date, id) {
     setTodosByDate((prev) => {
-      const dayTodos = prev[selectedDate].filter((todo) => todo.id !== id);
-      return { ...prev, [selectedDate]: dayTodos };
+      const dayTodos = (prev[date] || []).filter((todo) => todo.id !== id);
+      return { ...prev, [date]: dayTodos };
     });
   }
 
-  function updateTodo(updatedTodo) {
+  function updateTodo(date, updatedTodo) {
     setTodosByDate((prev) => {
-      const dayTodos = prev[selectedDate].map((todo) =>
+      const dayTodos = (prev[date] || []).map((todo) =>
         todo.id === updatedTodo.id ? updatedTodo : todo
       );
-      return { ...prev, [selectedDate]: sortTodosByStartTime(dayTodos) };
+      return { ...prev, [date]: sortTodosByStartTime(dayTodos) };
     });
   }
 
-  function addTodo(newTodo) {
+  function addTodo(date, newTodo) {
     setTodosByDate((prev) => {
-      const dayTodos = prev[selectedDate]
-        ? [...prev[selectedDate], newTodo]
-        : [newTodo];
-      return { ...prev, [selectedDate]: sortTodosByStartTime(dayTodos) };
+      const dayTodos = prev[date] ? [...prev[date], newTodo] : [newTodo];
+      return { ...prev, [date]: sortTodosByStartTime(dayTodos) };
     });
   }
 
   return (
     <TodoContext.Provider
       value={{
-        todos,
         todosByDate,
-        setTodosByDate,
-        selectedDate,
-        setSelectedDate,
+        addTodo,
         toggleTodo,
         deleteTodo,
         updateTodo,
-        addTodo,
       }}
     >
       {children}

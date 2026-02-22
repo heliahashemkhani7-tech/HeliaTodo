@@ -1,0 +1,5 @@
+[33m294e89c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33md36cf93[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{1}: commit: add date selection page and back button for daily todos
+[33m294e89c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{2}: commit: daily todo and add context
+[33m15825b9[m HEAD@{3}: commit: first commit
+[33m7ea8d9b[m HEAD@{4}: commit (initial): Initialize project using Create React App

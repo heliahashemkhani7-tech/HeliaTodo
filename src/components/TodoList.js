@@ -2,17 +2,22 @@ import { useState } from "react";
 import EditTodoForm from "./EditTodoForm";
 import { formatTimeToAMPM } from "./timeUtils";
 import { useTodos } from "../contexts/Todocontext";
+import { useParams } from "react-router-dom";
 
 export default function TodoList() {
   const [editingId, setEditingId] = useState(null);
-  const { todos, toggleTodo, deleteTodo, updateTodo } = useTodos();
+  const { todosByDate, toggleTodo, deleteTodo, updateTodo } = useTodos();
+  const { date } = useParams();
+
+  // همیشه fallback بده
+  const todos = todosByDate[date] || [];
 
   const completedCount = todos.filter((t) => t.isDone).length;
   const progress =
     todos.length === 0 ? 0 : Math.round((completedCount / todos.length) * 100);
 
   function handleSave(todo) {
-    updateTodo(todo);
+    updateTodo(date, todo); // 🔥 date پاس داده می‌شود
     setEditingId(null);
   }
 
@@ -61,13 +66,14 @@ export default function TodoList() {
                 <div className="task-info">
                   <h4>{todo.title.toUpperCase()}</h4>
                   <p>
-                    {formatTimeToAMPM(todo.firstTime)} - {formatTimeToAMPM(todo.secondTime)}
+                    {formatTimeToAMPM(todo.firstTime)} -{" "}
+                    {formatTimeToAMPM(todo.secondTime)}
                   </p>
                 </div>
                 <input
                   type="checkbox"
                   checked={todo.isDone}
-                  onChange={() => toggleTodo(todo.id)}
+                  onChange={() => toggleTodo(date, todo.id)}
                 />
                 <button className="edit" onClick={() => setEditingId(todo.id)}>
                   Edit
@@ -86,15 +92,19 @@ export default function TodoList() {
               <div className="task-info">
                 <h4>{todo.title.toUpperCase()}</h4>
                 <p>
-                  {formatTimeToAMPM(todo.firstTime)} - {formatTimeToAMPM(todo.secondTime)}
+                  {formatTimeToAMPM(todo.firstTime)} -{" "}
+                  {formatTimeToAMPM(todo.secondTime)}
                 </p>
               </div>
               <input
                 type="checkbox"
                 checked={todo.isDone}
-                onChange={() => toggleTodo(todo.id)}
+                onChange={() => toggleTodo(date, todo.id)}
               />
-              <span className="delete" onClick={() => deleteTodo(todo.id)}>
+              <span
+                className="delete"
+                onClick={() => deleteTodo(date, todo.id)}
+              >
                 ×
               </span>
             </div>

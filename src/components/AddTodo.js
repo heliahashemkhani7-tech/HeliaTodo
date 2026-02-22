@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { timeToMinutes } from "./timeUtils";
 import { useTodos } from "../contexts/Todocontext";
+import { useParams } from "react-router-dom";
 
 export default function AddTodo() {
   const { addTodo } = useTodos();
+  const { date } = useParams();
   const [title, setTitle] = useState("");
   const [firstTime, setFirstTime] = useState("");
   const [secondTime, setSecondTime] = useState("");
@@ -27,8 +29,8 @@ export default function AddTodo() {
       secondTime,
       isDone: false,
     };
+    addTodo(date, newTodo);
 
-    addTodo(newTodo);
     setTitle("");
     setFirstTime("");
     setSecondTime("");

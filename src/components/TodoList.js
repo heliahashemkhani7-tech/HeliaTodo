@@ -8,16 +8,16 @@ export default function TodoList() {
   const [editingId, setEditingId] = useState(null);
   const { todosByDate, toggleTodo, deleteTodo, updateTodo } = useTodos();
   const { date } = useParams();
-
-  // همیشه fallback بده
-  const todos = todosByDate[date] || [];
-
+  const [search, setSearch] = useState("");
+  const todos = (todosByDate[date] || []).filter((todo) =>
+    todo.title.toLowerCase().includes(search.toLowerCase())
+  );
   const completedCount = todos.filter((t) => t.isDone).length;
   const progress =
     todos.length === 0 ? 0 : Math.round((completedCount / todos.length) * 100);
 
   function handleSave(todo) {
-    updateTodo(date, todo); // 🔥 date پاس داده می‌شود
+    updateTodo(date, todo);
     setEditingId(null);
   }
 
@@ -48,9 +48,21 @@ export default function TodoList() {
         />
         <h3>You done {progress}% of your tasks</h3>
       </div>
-
+      <input
+        type="text"
+        placeholder="Search tasks..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="search"
+      />
       <div className="task">
         <h1>Tasks</h1>
+        {todos.length === 0 && (
+          <h4 style={{ color: "red", fontWeight: "bold" , textTransform:'capitalize' , fontSize:'2rem'}}>
+            No tasks for this day
+          </h4>
+        )}
+
         {todos
           .filter((todo) => !todo.isDone)
           .map((todo) =>
@@ -64,7 +76,7 @@ export default function TodoList() {
             ) : (
               <div key={todo.id} className="todo-item">
                 <div className="task-info">
-                  <h4>{todo.title.toUpperCase()}</h4>
+                  <h4>{todo.title}</h4>
                   <p>
                     {formatTimeToAMPM(todo.firstTime)} -{" "}
                     {formatTimeToAMPM(todo.secondTime)}
@@ -90,7 +102,7 @@ export default function TodoList() {
           .map((todo) => (
             <div key={todo.id} className="todo-item">
               <div className="task-info">
-                <h4>{todo.title.toUpperCase()}</h4>
+                <h4>{todo.title}</h4>
                 <p>
                   {formatTimeToAMPM(todo.firstTime)} -{" "}
                   {formatTimeToAMPM(todo.secondTime)}

@@ -64,6 +64,10 @@ form {
   color: white;
   text-shadow: 2px 2px 4px black;
 }
+.completed h4,
+.task h4 {
+ text-transform: capitalize;
+}
 .todo-item {
   display: grid;
   grid-template-columns: 1fr 40px 40px;
@@ -95,7 +99,6 @@ form {
   left: 82%;
   display: flex;
   flex-direction: column;
-  padding: 1%;
   color: rgb(255, 255, 255);
 }
 .progress h3 {
@@ -125,7 +128,9 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: pointer;
   border: none;
 }
-
+input[type='checkbox'] {
+  cursor: pointer;
+}
 .back {
   position: fixed;
   top: 2%;
@@ -138,4 +143,24 @@ input[type="range"]::-webkit-slider-thumb {
 .back h4 {
   padding: 0;
   margin: 0;
+}
+
+.date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-transform: capitalize;
+  background-image: linear-gradient(to bottom , #333 0 , #555 50% , #888 100%);
+  color: #58c2ff;
+}
+
+.date h2 {
+  text-shadow: 0px 0px 4px #333;
+}
+
+
+.search {
+  position: absolute;
 }
